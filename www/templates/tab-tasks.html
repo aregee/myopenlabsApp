@@ -1,0 +1,83 @@
+<div ng-show="!showTask">
+<div class="bar bar-header bar-stable nav-title-slide-ios7">
+  <div class="h1 title">My Tasks</div>
+   <button  class="button icon-right ion-plus button-outline button-dark" ng-click="openModal()"></button>  
+   <button  class="button icon-left ion-refresh button-outline button-dark" ng-click="fetch()"></button>
+</div>
+
+<ion-content  ng-init="fetch()">
+<ion-list>
+<div class="card" ng-repeat="task in tasks">
+    <a class="item item-avatar" ng-click="fetchTask(task.parent, task.id)">
+    <img src="{{ task.assigned_to.image.url }}">
+    <h2>  {{ task.assigned_to.displayName }}</h2>
+    <p class="text-color-positive text-aligin-right">
+    	{{ task.progress_state }}
+	</p>
+    </a>	
+  <div class="item item-text-wrap">
+  {{ task.name }}
+  Created on: {{ task.create_date | date:'MM/dd/yyyy @ h:mma'}}
+  </div>
+</div>
+</ion-list>
+</ion-content>
+</div>
+<div ng-hide="!showTask">
+<div class="bar bar-header bar-stable nav-title-slide-ios7">
+    <button  class="button icon-left ion-chevron-left button-outline button-dark" ng-click="toggleView()"></button>
+  <div class="h1 title"> Task Details </div>  
+</div>  
+<ion-content>
+  <div class="item item-avatar">
+    <img src="{{ task.assigned_to.image.url }}">
+    <h2>{{ task.assigned_to.displayName }}</h2>
+    <p> {{ task.progress_state }}</p>
+  </div>
+<div class="card">
+  <div class="item item-text-wrap">
+      <h2>#{{ task.id }} {{ task.name }} </h2>
+      <p>{{ task.comment }}</p>
+      <p>Time Spent: {{ task.hours}}</p>
+  </div>
+</div>
+<div class="list">
+  <div href="#" class="item item-thumbnail-left" ng-repeat="post in task.comments">
+    <img src="{{ post.updatedBy.image.url }}">
+    <p>{{ post.comment }}</p>
+    <p ng-if="post.new_assignee != null">{{post.updatedBy.displayName}} assigned to {{ post.new_assignee.displayName}}</p>
+    <p ng-if="post.new_progress_state != null">
+      {{ post.previous_progress_state}} <i class="icon ion-ios7-arrow-thin-right"></i> {{ post.new_progress_state }} 
+    </p>
+    <p ng-if="post.objectType == 'timesheet.line'">
+      worked {{post.displayName}} on {{post.create_date | date:'MM/dd/yyyy @ h:mma'}}
+    </p>
+  </div>
+</div>
+</ion-content>
+</div>
+
+<script id="modal.html" type="text/ng-template">
+      <div class="modal" ng-controller="ModalCtrl">
+        <header class="bar bar-header">
+          <h1 class="title">New Task</h1>
+          <div class="button button-clear" ng-click="hideModal()"><span class="icon ion-close"></span></div>
+        </header>
+  <div class="list" style="margin-top:60px">
+  <div class="item item-input item-select">
+    <span class="input-label">Project</span>
+    <select ng-model="taskFormModel.project" ng-options="pro.id as pro.name for pro in projects">
+    </select>
+  </div>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Name</span>
+    <input type="text" ng-model="taskFormModel.name" placeholder="Name for the task">
+  </label>
+    <label class="item item-input item-stacked-label">
+    <span class="input-label">Description</span>
+    <input type="text" ng-model="taskFormModel.description" placeholder="Name for the task">
+  </label>
+  <button class="button button-block button-positive" ng-click="submitForm()"> Create </button> 
+  </div>
+  </div>
+</script>

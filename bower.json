@@ -1,0 +1,9 @@
+{
+  "name": "nereidApp",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular-nereid-auth": "~1.0.9",
+    "angular-base64": "~2.0.1",
+    "highcharts-ng": "~0.0.6"
+  }
+}

@@ -1,0 +1,67 @@
+<div class="bar bar-header" ng-show="showStream">
+  <button  class="button icon-left ion-chevron-left button-outline button-dark" ng-click="showStream=false">Back</button>
+  <div class="h1 title">Activity Stream</div>
+</div>
+
+<div class="bar bar-header" ng-show="!showStream" >
+  <div class="h1 title">Dashboard</div>
+</div>
+<ion-content>
+  <div class="list" ng-show="!showStream">
+        <a ng-repeat="project in projects" ng-click="fetch(project.url, 1)" class="item">
+          <h2>{{ project.name }}</h2>
+          <h3>{{ project.assigned_to }}</h3>
+          <h4>{{ project.progress_state }}</h4>
+          <h4>{{ project.create_date | date:'MM/dd/yyyy @ h:mma' }}</h4>
+        </a>
+  </div>
+  <ion-list ng-show="showStream">
+    <a class="item item-avatar" ng-repeat="stream in details" ng-click="openModal(stream)">
+      <img src="{{ stream.actor.image.url }}">
+      <h2>{{ stream.actor.displayName }}</h2>
+      <p> {{ stream.verb }}  {{ stream.target.displayName || stream.target.name }} </p>
+      <p> {{ stream.object.progress_state }} on {{ stream.published | date:'MM/dd/yyyy @ h:mma'}}
+    </p>
+    </a>
+  </ion-list>
+</ion-content>
+
+<script id="modal.html" type="text/ng-template">
+      <div class="modal" ng-controller="ModalCtrl">
+        <header class="bar bar-header bar-positive">
+          <h1 class="title">Activity</h1>
+          <div class="button button-clear" ng-click="hideModal()"><span class="icon ion-close"></span></div>
+        </header>
+        <content has-header="true" padding="true">
+
+<div class="list card" style="margin-top:70px">
+
+  <div class="item item-avatar">
+    <img src="{{ activity.actor.image.url }}">
+    <h2>{{ activity.actor.displayName }}</h2>
+  </div>
+
+  <div class="item item-body">
+    <p>
+      {{ activity.object.updatedBy.displayName }} {{ activity.verb }} on {{ activity.published | date:'MM/dd/yyyy @ h:mma'}}
+    </p>
+    <p> {{ activity.verb }} {{ activity.target.displayName || activity.target.name }} </p>
+    <p> Comment: {{ activity.target.comment || 'N/A' }}</p>
+  </div>
+
+  <div class="item tabs tabs-secondary tabs-icon-left">
+    <a class="tab-item" href="#">
+      {{ activity.object.previous_progress_state}}
+    </a>
+    <a><i ng-if="activity.object.previous_progress_state != null" class="ion-ios7-arrow-thin-right"></i></a>
+    <a class="tab-item" href="#">
+      {{ activity.object.new_state}}
+    </a>
+      <a><i ng-if="activity.object.new_state!=null" class="ion-ios7-arrow-thin-right"></i></a>
+    <a class="tab-item" href="#">
+      {{ activity.object.new_progress_state}}
+    </a>
+  </div>
+  </content>
+  </div>
+</script>
