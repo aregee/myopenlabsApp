@@ -6,6 +6,7 @@
 
 ```bash
 $ sudo npm install -g ionic cordova
+$ bower install
 ```
 
 Then, to run it:
