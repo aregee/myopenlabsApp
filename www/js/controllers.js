@@ -241,13 +241,16 @@ angular.module('starter.controllers', [])
               // credentials are correct, but could not connect to the server ?
               $scope.message = 'Could not connect to the server';
               $scope.badCredentials = false;
+              alert($scope.message);
               return;
             }
             $scope.badCredentials = true;
             if (data.message) {
               $scope.message = data.message;
+              alert($scope.message);
             } else {
               $scope.message = 'Login Failed';
+              alert($scope.message);
             }
           });
       };

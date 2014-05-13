@@ -7,32 +7,34 @@
     <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
   </ion-pane>
 
-  <ion-side-menu side="Menu">
+  <ion-side-menu side="left">
     <header class="bar bar-header bar-stable">
-      <h1 class="title">Left</h1>
+      <h1 class="title">Menu</h1>
     </header>
     <ion-content class="has-header">
       <div class="item item-divider">
-          My Projects
+          <i class="ion-ios7-briefcase"></i> Projects 
       </div>
       <ion-list>
-        <ion-item nav-clear menu-close ng-repeat="project in projects" ng-click="" class="item" href="#/app/projects/{{project.id}}">
-        {{ project.name }}
+        <ion-item nav-clear menu-close ng-repeat="project in projects" ng-click="" class="item" ng-href="#/app/projects/{{project.id}}">
+        {{ project.name}}
         </ion-item>
-        <ion-item nav-clear menu-close href="#/app/tasks">
-          My Tasks
+      <div class="item item-divider" nav-clear menu-close ng-href="#/app/tasks">
+        <i class="ion-ios7-calendar"></i>
+        Tasks
+<!--         <a nav-clear menu-close href="#/app/tasks" style="text-decoration: none; color: #000">Tasks</a> -->
+      </div>
+        <ion-item nav-clear menu-close href="#/app/stats">
+          <i class="ion-stats-bars"></i> Stats
         </ion-item>
         <ion-item nav-clear menu-close href="#/app/settings">
-          Settings
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/stats">
-          Stats
+          <i class="ion-ios7-gear"></i> Settings
         </ion-item>
         <ion-item  show-if-auth  nereid-auth ng-click="logout()">
-          Logout
+          <i class="ion-log-out"></i> Logout 
         </ion-item>
         <ion-item  hide-if-auth  nereid-auth href="#/main">
-          Login
+          <i class="ion-log-in"></i> Login
         </ion-item>
       </ion-list>
     </ion-content>
