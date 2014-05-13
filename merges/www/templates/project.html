@@ -1,0 +1,86 @@
+<ion-view title="{{ project.name }}">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+       <button  class="button icon-left ion-chevron-left button-outline button-dark" ng-click="toggleView()" ng-show="showTask"></button>
+  </ion-nav-buttons>
+  <ion-tabs class="tabs-icon-top">
+    <ion-tab title="{{ project.name }}" ng-init="fetchProject()" icon-on="ion-ios7-box-outline" icon-off="ion-ios7-box-outline">
+      <ion-content has-header="true" padding="false">
+        <ul class="list">
+        <li class="item">{{ project.name }}</li>
+        <li class="item">
+          Created on {{ project.create_date  | date:'MM/dd/yyyy @ h:mma'}}</li>
+        </ul>
+        <div class="list">
+
+      <div class="item item-divider">
+          Participants 
+      </div>
+
+    <a class="item item-avatar" ng-repeat="person in project.participants">
+      <img src="{{ person.image.url }}">
+      <h2>{{ person.displayName }}</h2>
+    </a>
+  </div>
+      </ion-content>
+    </ion-tab>
+    <ion-tab title="Activity" icon-on="ion-social-buffer" icon-off="ion-social-buffer-outline">
+      <ion-content has-header="true" padding="false" ng-init="fetchStream(project.url)">
+        <ion-refresher pulling-text="Pull to refresh..." on-refresh="fetchStream(project.url)"></ion-refresher>
+        <a class="item item-avatar" ng-repeat="stream in activityFeed">
+          <img src="{{ stream.actor.image.url }}">
+          <h2>{{ stream.actor.displayName }}</h2>
+          <p>{{ stream.verb }} {{ stream.target.displayName || stream.target.name }}</p>
+          <p>{{ stream.object.progress_state }} on {{ stream.published | date:'MM/dd/yyyy
+            @ h:mma'}}</p>
+        </a>
+      </ion-content>
+    </ion-tab>
+    <ion-tab title="Tasks" icon="icon ion-ios7-calendar" icon-off="ion-ios7-calendar-outline">
+      <ion-content has-header="true" padding="false" ng-init="fetchTasks(project.url)">
+        <div class="list" ng-show="!showTask">
+          <a class="item item-avatar" ng-repeat="task in tasks" ng-click="fetchTask(task.parent, task.id)">
+            <img src="{{ task.assigned_to.image.url }}">
+            <h2>  {{ task.assigned_to.displayName }}</h2>
+            <p class="text-color-positive text-aligin-right">{{ task.progress_state }}</p>
+            <p>{{ task.name }} Created on: {{ task.create_date | date:'MM/dd/yyyy @
+              h:mma'}}</p>
+          </a>
+        </div>
+      </ion-content>
+
+<div ng-hide="!showTask">
+<ion-content>
+  <div class="item item-avatar">
+    <img src="{{ task.assigned_to.image.url }}">
+    <h2>{{ task.assigned_to.displayName }}</h2>
+    <p> {{ task.progress_state }}</p>
+  </div>
+<div class="card">
+  <div class="item item-text-wrap">
+      <h2>#{{ task.id }} {{ task.name }} </h2>
+      <p>{{ task.comment }}</p>
+      <p>Time Spent: {{ task.hours}}</p>
+  </div>
+</div>
+<div class="list">
+  <div href="#" class="item item-thumbnail-left" ng-repeat="post in task.comments">
+    <img src="{{ post.updatedBy.image.url }}">
+    <p>{{ post.comment }}</p>
+    <p ng-if="post.new_assignee != null">{{post.updatedBy.displayName}} assigned to {{ post.new_assignee.displayName}}</p>
+    <p ng-if="post.new_progress_state != null">
+      {{ post.previous_progress_state}} <i class="icon ion-ios7-arrow-thin-right"></i> {{ post.new_progress_state }} 
+    </p>
+    <p ng-if="post.objectType == 'timesheet.line'">
+      worked {{post.displayName}} on {{post.create_date | date:'MM/dd/yyyy @ h:mma'}}
+    </p>
+  </div>
+</div>
+</ion-content>
+</div>
+
+    </ion-tab>
+  </ion-tabs>
+</ion-view>

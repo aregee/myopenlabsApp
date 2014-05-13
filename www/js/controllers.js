@@ -1,41 +1,25 @@
-angular.module('NereidProjectApp.controllers', [])
-.controller('DashCtrl', function($scope, $state, nereidAuth, Projects, Stream, $ionicModal) {
-  Projects.get()
-    .success(function(result, status) {
-      $scope.projects = result.items;
-    });
-  $scope.showStream = false;
-  $scope.fetch = function (uri, page) {
-    Stream.get(uri, page)
-      .success(function (result, status) {
-        $scope.details = result.items;
-        $scope.showStream = true;
-      });
-  };
-  $scope.activityState = false;
-  $scope.viewState = function (data) {
-      $scope.activity = data;
-      $scope.activityState = true
-  };
-  $scope.openModal = function(data) {  
-    $scope.activity = data;        
-    $scope.modalCtrl.show();
-  };
-    
-  $ionicModal.fromTemplateUrl('modal.html', function(modal) {
-    $scope.modalCtrl = modal;
-  }, {
-    scope: $scope,
-    animation: 'slide-right-left'//'slide-left-right', 'slide-in-up', 'slide-right-left'
-  });
+angular.module('starter.controllers', [])
+
+.controller('AppCtrl', function($scope, Projects) {
+	Projects.get()
+  	.success(function(data, status) {
+  		$scope.projects = data.items;
+  	})
+  	.error(function(reason) {
+  		console.log(reason.message);
+  	});
 })
-.controller('ModalCtrl', function($scope) {
-        $scope.hideModal = function() {
-          $scope.modalCtrl.hide();
-        };
-        $scope.applyModal = function() {
-          $scope.modalCtrl.remove();
-        };
+.controller('SettingsCtrl', function($scope, nereidAuth) {
+	$scope.userInfo = nereidAuth.user;	
+})
+.controller('ProjectsCtrl', function($scope, Projects) {
+  Projects.get()
+  	.success(function(data, status) {
+  		$scope.projects = data.items;
+  	})
+  	.error(function(reason) {
+  		console.log(reason.message);
+  	});
 })
 .controller('StatsCtrl', function($scope, Stats) {
     $scope.performers = [];
@@ -106,14 +90,62 @@ angular.module('NereidProjectApp.controllers', [])
     }
 
 })
-.controller('TaskCtrl', function($scope, Tasks, $state, $ionicModal) {
-  console.log($scope.$parent);
+.controller('ProjectCtrl', function($scope, $stateParams , Project, Stream, nereidAuth, Tasks) {
+	$scope.userInfo = nereidAuth.user();
+  $scope.showTask = false;
+	$scope.fetchProject = function () {
+		Project.get($stateParams.projectId)
+		 .success(function(data, status) {
+		  	$scope.project = data;
+		 })
+		 .error(function(reason, status){
+			console.log(reason.message);
+		 });
+	};
+  //$scope.fetchProject();
+	$scope.fetchStream = function (projectUrl) {
+		Stream.get(projectUrl)
+			.success(function (data, status) {
+				$scope.activityFeed = data.items;
+			})
+			.finally(function() {
+				$scope.$broadcast('scroll.refreshComplete');	
+			});
+	};
+	$scope.fetchTasks = function (projectUrl) {
+		Project.getTaskList(projectUrl)
+			.success(function (data) {
+				$scope.tasks = data.items;	
+			});
+	};
+
+  $scope.toggleView = function () {
+      if($scope.showTask === true) {
+        $scope.showTask = false;
+      }
+      else {
+        $scope.showTask = true;
+      }
+  };
+  $scope.fetchTask = function() {
+    var urlString = '/project-'+ arguments[0] + '/task-' + arguments[1]
+    Tasks.getTask(urlString)
+      .success(function (data) {
+        $scope.task = data;
+        $scope.toggleView();      
+    });
+  };
+})
+.controller('TasksCtrl', function($scope, Tasks, $state, $ionicModal) {
   $scope.fetch= function() {
     param = { 'state': 'opened'};
     Tasks.get(param)
     .success(function(data, status) {
       $scope.tasks = data.items;
-     });
+     })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');  
+    });
   };
 
   $scope.showTask = false;
@@ -171,13 +203,7 @@ angular.module('NereidProjectApp.controllers', [])
 })
 .controller('LoginCtrl', ['$scope', 'nereidAuth', '$location',
     function($scope, nereidAuth, $location) {
-
-      if (nereidAuth.isLoggedIn()) {
-      	  $scope.isLogged = true;
-          nereidAuth.refreshUserInfo();
-          $scope.userInfo = nereidAuth.user();
-      }
-
+      $scope.userInfo = nereidAuth.user;
       $scope.user = {
         email: '',
         password: ''
@@ -206,7 +232,7 @@ angular.module('NereidProjectApp.controllers', [])
               $scope.message = 'Login Succesful';
             }
             $scope.isLogged = true;
-            $location.path('/tab/dash');
+            $location.path('/app/projects');
           })
           .error(function(data, status){
             $scope.loginSuccess = false;

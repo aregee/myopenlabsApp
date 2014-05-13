@@ -1,0 +1,15 @@
+<ion-view title="Stats">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+    <button  class="button ion-arrow-swap icon-right button-outline button-dark" ng-click="toggleGraph()"></button>
+  </ion-nav-buttons>
+    <ion-content class="has-header" ng-if="viewPerformer">
+    <highchart id="chart1" config="chartConfig"></highchart>
+    </ion-content>
+
+  <ion-content class="has-header" ng-if="!viewPerformer">
+    <highchart id="chart1" config="chartConfig2"></highchart>
+  </ion-content>
+</ion-view>

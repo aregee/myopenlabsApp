@@ -1,0 +1,20 @@
+<ion-view title="Browse">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+<!-- Account Info for Logged in User -->
+  <ion-content class="has-header" scroll="false" show-if-auth> 
+  <div class="list card">
+    <div class="item item-thumbnail padding">
+    <center>
+    <img src="{{ userInfo().image.url }}" height="160px" width="160px">
+    <h2>{{ userInfo().displayName }}</h2>
+    <p> {{ userInfo().email }}</p>
+    </center>
+    </div>
+    <ion-list>
+      <ion-item ng-repeat="permit in userInfo().permissions">{{ permit }}</ion-item>
+    </ion-list>
+  </div>
+</ion-content>
+</ion-view>

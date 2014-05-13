@@ -1,0 +1,15 @@
+<ion-view title="Projects">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+    <ion-list>
+       <a ng-repeat="project in projects" ng-click="" class="item" href="#/app/projects/{{project.id}}">
+          <h2>{{ project.name }}</h2>
+          <h3>{{ project.assigned_to }}</h3>
+          <h4>{{ project.progress_state }}</h4>
+          <h4>{{ project.create_date | date:'MM/dd/yyyy @ h:mma' }}</h4>
+        </a>
+    </ion-list>
+  </ion-content>
+</ion-view>

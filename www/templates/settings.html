@@ -1,0 +1,29 @@
+<ion-view title="Settings">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-tabs class="tabs-icon-top">
+    <ion-tab title="Me" icon-on="ion-ios7-person" icon-off="ion-ios7-person-outline">
+      <ion-content has-header="true" padding="true">
+        <!-- Account Info for Logged in User -->
+        <div class="list card">
+          <div class="item item-thumbnail padding">
+            <center>
+              <img src="{{ userInfo().image.url }}" height="160px" width="160px">
+              <h2>{{ userInfo().displayName }}</h2>
+              <p>{{ userInfo().email }}</p>
+            </center>
+          </div>
+          <ion-list>
+            <ion-item ng-repeat="permit in userInfo().permissions">{{ permit }}</ion-item>
+          </ion-list>
+        </div>
+      </ion-content>
+    </ion-tab>
+    <ion-tab title="Config" icon-on="ion-ios7-gear-outline" icon-off="ion-ios7-gear-outline">
+      <ion-content has-header="true" padding="true">
+        <h2>Placeholder to set api base path</h2>
+      </ion-content>
+    </ion-tab>
+  </ion-tabs>
+</ion-view>

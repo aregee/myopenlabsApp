@@ -1,0 +1,18 @@
+<div class="bar bar-header">
+  <div class="h1 title">Nereid Project Todo</div>
+</div>
+<ion-content class="padding" style="margin-top:60px" hide-if-auth>
+<div class="list">
+  <label class="item item-input">
+  	<span class="input-label">Username</span>
+	<input type="email" required name="email" ng-model="user.email">
+  </label>
+  <label class="item item-input">
+  	<span class="input-label">Password</span>
+    <input type="password" name="password" required ng-model="user.password">
+  </label>
+</div>
+<button class="button button-full button-positive" ng-click="submit()">
+  Submit
+</button>
+</ion-content>

@@ -1,28 +1,23 @@
-<div ng-show="!showTask">
-<div class="bar bar-header bar-stable nav-title-slide-ios7">
-  <div class="h1 title">My Tasks</div>
-   <button  class="button icon-right ion-plus button-outline button-dark" ng-click="openModal()"></button>  
-   <button  class="button icon-left ion-refresh button-outline button-dark" ng-click="fetch()"></button>
-</div>
-
+<ion-view title="My Tasks">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+         <button  class="button icon-left ion-chevron-left button-outline button-dark" ng-click="toggleView()" ng-show="showTask"></button>
+         <button  class="button icon-right ion-plus button-outline button-dark" ng-click="openModal()" ng-hide="showTask"></button>  
+  </ion-nav-buttons>
 <ion-content  ng-init="fetch()">
-<ion-list>
-<div class="card" ng-repeat="task in tasks">
-    <a class="item item-avatar" ng-click="fetchTask(task.parent, task.id)">
-    <img src="{{ task.assigned_to.image.url }}">
-    <h2>  {{ task.assigned_to.displayName }}</h2>
-    <p class="text-color-positive text-aligin-right">
-    	{{ task.progress_state }}
-	</p>
-    </a>	
-  <div class="item item-text-wrap">
-  {{ task.name }}
-  Created on: {{ task.create_date | date:'MM/dd/yyyy @ h:mma'}}
-  </div>
-</div>
-</ion-list>
+<ion-refresher pulling-text="Pull to refresh..." on-refresh="fetch()"></ion-refresher>
+        <div class="list" ng-show="!showTask">
+          <a class="item item-avatar" ng-repeat="task in tasks" ng-click="fetchTask(task.parent, task.id)">
+            <img src="{{ task.assigned_to.image.url }}">
+            <h2>  {{ task.assigned_to.displayName }}</h2>
+            <p class="text-color-positive text-aligin-right">{{ task.progress_state }}</p>
+            <p>{{ task.name }} Created on: {{ task.create_date | date:'MM/dd/yyyy @
+              h:mma'}}</p>
+          </a>
+        </div>
 </ion-content>
-</div>
 <div ng-hide="!showTask">
 <div class="bar bar-header bar-stable nav-title-slide-ios7">
     <button  class="button icon-left ion-chevron-left button-outline button-dark" ng-click="toggleView()"></button>
@@ -81,3 +76,4 @@
   </div>
   </div>
 </script>
+</ion-view>
